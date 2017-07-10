@@ -6,12 +6,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 	public Sprite[] numberSprites;
+	public Sprite[] winSprites;
 
 	public GameObject player1;
 	public GameObject player2;
 
 	public GameObject ball;
 
+	public SpriteRenderer winMsg;
 	public SpriteRenderer playerScore1;
 	public SpriteRenderer playerScore2;
 
@@ -38,19 +40,26 @@ public class GameManager : MonoBehaviour {
 
 	internal void CollisionDetected(ScoreWall scoreWall) {
 		if (scoreWall.gameObject == rightWall || scoreWall.gameObject == leftWall) {
-			ball.GetComponent<BallMover>().resetBall();
 			if (scoreWall.gameObject == rightWall) {
 				playerScore1_int++;
-				if (playerScore1_int > 11) {
-					reset();
+				if (playerScore1_int >= 11) {
+					showWinMsg(1);
+				} else {
+					ball.GetComponent<BallMover>().resetBall();
 				}
 			} else if (scoreWall.gameObject == leftWall) {
 				playerScore2_int++;
-				if (playerScore2_int > 11) {
-					reset();
+				if (playerScore2_int >= 11) {
+					showWinMsg(2);
+				} else {
+					ball.GetComponent<BallMover>().resetBall();
 				}
 			}
 			updateScore();
 		}
+	}
+
+	void showWinMsg(int playerNum) {
+		winMsg.sprite = winSprites[playerNum - 1];
 	}
 }
